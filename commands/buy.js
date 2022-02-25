@@ -19,6 +19,8 @@ module.exports =
 
             var helpme = await storage.getItem(`money${message.author.id}`)
 
+            var hahanonftforyou = true
+
             if (helpme >= itemPrice)
             {
                 if (await storage.getItem(args[0] + message.author.id) == null)
@@ -27,8 +29,12 @@ module.exports =
                 /*if (await storage.getItem(`moneyboost${message.author.id}`) == null)
                     await storage.setItem(`moneyboost${message.author.id}`, 1)*/
 
-                if (itemId == 0)
+                if (itemId == 0 && await storage.getItem('nftBought') == false)
                 {
+                    hahanonftforyou = false
+
+                    itemPrice = await storage.getItem('nftPrice')
+
                     await storage.setItem(`money${await storage.getItem('nftOwner')}`, await storage.getItem(`money${await storage.getItem('nftOwner')}`) + itemPrice)
                     
                     await storage.setItem('nftBought',true)
@@ -40,13 +46,17 @@ module.exports =
                     message.reply("your 1.5x times boost was activated ! ! !")
                 }*/
 
-                await storage.setItem(args[0] + message.author.id,await storage.getItem(args[0] + message.author.id) + 1)
+                if (itemId != 0 || !hahanonftforyou)
+                {
+                    await storage.setItem(args[0] + message.author.id,await storage.getItem(args[0] + message.author.id) + 1)
 
-                await storage.setItem(`money${message.author.id}`, await storage.getItem(`money${message.author.id}`) - itemPrice)
+                    await storage.setItem(`money${message.author.id}`, await storage.getItem(`money${message.author.id}`) - itemPrice)
 
-                var trueItem = args[0].replaceAll('_',' ')
+                    var trueItem = args[0].replaceAll('_',' ')
             
-                message.reply("uh you bought a " + trueItem + " for " + itemPrice + "BǤ and now you have " + await storage.getItem(args[0] + message.author.id) + " of that item")
+                    message.reply("uh you bought a " + trueItem + " for " + itemPrice + "BǤ and now you have " + await storage.getItem(args[0] + message.author.id) + " of that item")
+                } else
+                    message.reply('the nft was already bought L L L L')
             } else
                 message.reply("ur poor")
         } else
